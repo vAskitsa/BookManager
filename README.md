@@ -1,2 +1,2 @@
-# BookManagerApi
-Backend project for book collection management software
+# BookManager
+Book collection management software
