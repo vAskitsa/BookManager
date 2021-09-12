@@ -38,7 +38,7 @@ export const MainPage = () => {
         axios
             .post('https://localhost:44319/api/Books', oBook)
             .then((res) => {
-                setLoading(false);
+                setLoading(true);
             })
             .catch(err => {
                 console.error(err);
@@ -52,7 +52,7 @@ export const MainPage = () => {
         axios
             .put('https://localhost:44319/api/Books/' + oBook.id, oBook)
             .then((res) => {
-                setLoading(false);
+                setLoading(true);
             })
             .catch(err => {
                 console.error(err);
@@ -63,7 +63,7 @@ export const MainPage = () => {
         axios
             .delete('https://localhost:44319/api/Books/' + oBook.id)
             .then((res) => {
-                setLoading(false);
+                setLoading(true);
             })
             .catch(err => {
                 console.error(err);
