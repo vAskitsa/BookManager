@@ -18,7 +18,8 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "concurrently \"npm install\" && \"react-scripts start\" && \"cd ../Back/BookManagerApi-master && dotnet run BookManagerApi\"",
+    "setup": "npm install",
+    "start": "npm run setup && concurrently \"react-scripts start\" && \"cd ../Back/BookManagerApi-master && dotnet run BookManagerApi\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
