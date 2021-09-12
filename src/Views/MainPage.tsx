@@ -3,7 +3,6 @@ import { TextField } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import axios from 'axios';
 import "../styles/MainPage.scss";
-import { Input } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -16,58 +15,6 @@ interface IBook {
     name: string;
     description: string;
     author: string;
-}
-
-const SaveData = (oBook: IBook) => {
-    if (!ValidateData(oBook)) {
-        return;
-    }
-    oBook.id = 0;
-    axios
-        .post('https://localhost:44386/api/Books', oBook)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch(err => {
-            console.error(err);
-        });
-}
-
-const UpdateData = (oBook: IBook) => {
-    if (!ValidateData(oBook)) {
-        return;
-    }
-    axios
-        .put('https://localhost:44386/api/Books/' + oBook.id, oBook)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch(err => {
-            console.error(err);
-        });
-}
-
-const DeleteBook = (oBook: IBook) => {
-    axios
-        .delete('https://localhost:44386/api/Books/' + oBook.id)
-        .then((res) => {
-            console.log(res);
-        })
-        .catch(err => {
-            console.error(err);
-        });
-}
-
-const ValidateData = (oBook: IBook) => {
-    if (oBook.name === "") {
-        window.alert("Enter name!");
-        return false;
-    }
-    if (oBook.author === "") {
-        window.alert("Enter author!");
-        return false;
-    }
-    return true;
 }
 
 export const MainPage = () => {
@@ -83,6 +30,58 @@ export const MainPage = () => {
     const [currentBook, setCurrentBook] = useState<IBook>(oBook);
     const [lstData, setLstData] = useState(lst);
 
+    const SaveData = (oBook: IBook) => {
+        if (!ValidateData(oBook)) {
+            return;
+        }
+        oBook.id = 0;
+        axios
+            .post('https://localhost:44386/api/Books', oBook)
+            .then((res) => {
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+    
+    const UpdateData = (oBook: IBook) => {
+        if (!ValidateData(oBook)) {
+            return;
+        }
+        axios
+            .put('https://localhost:44386/api/Books/' + oBook.id, oBook)
+            .then((res) => {
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+    
+    const DeleteBook = (oBook: IBook) => {
+        axios
+            .delete('https://localhost:44386/api/Books/' + oBook.id)
+            .then((res) => {
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
+    
+    const ValidateData = (oBook: IBook) => {
+        if (oBook.name === "") {
+            window.alert("Enter name!");
+            return false;
+        }
+        if (oBook.author === "") {
+            window.alert("Enter author!");
+            return false;
+        }
+        return true;
+    }
+
     useEffect(() => {
         axios.get('https://localhost:44386/api/Books')
             .then((result: any) => {
@@ -94,8 +93,7 @@ export const MainPage = () => {
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
-    return <div className={"page"} >
-
+    return <div className={"page"}>
         <Grid container direction={"row"}>
             <Grid className={"tbBooks"} container item xs={5} spacing={4}>
                 <TableContainer component={Paper}>
@@ -105,7 +103,7 @@ export const MainPage = () => {
                                 lstData.map((row) => (
                                     <TableRow className={currentBook.id === row.id ? "selectedRow" : "tRow"} key={row.id}
                                         onClick={() => {
-                                            let book: IBook = lstData.find((element: IBook) => element.id == row.id)!;
+                                            let book: IBook = lstData.find((element: IBook) => element.id === row.id)!;
                                             setCurrentBook(book!);
                                         }}>
                                         <TableCell component="th" scope="row">
@@ -148,9 +146,9 @@ export const MainPage = () => {
                                 }));
                             }} />
                         <Grid direction={"row"}>
-                            <button onClick={() => { SaveData(currentBook); setLoading(true); }}>Save new</button>
-                            <button onClick={() => { UpdateData(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Save</button>
-                            <button onClick={() => { DeleteBook(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Delete</button>
+                            <button onClick={() => { SaveData(currentBook);}}>Save new</button>
+                            <button onClick={() => { UpdateData(currentBook); setCurrentBook(oBook);}} disabled={currentBook.id === 0}>Save</button>
+                            <button onClick={() => { DeleteBook(currentBook); setCurrentBook(oBook);}} disabled={currentBook.id === 0}>Delete</button>
                         </Grid>
                     </Grid>
                     </div>
