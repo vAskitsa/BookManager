@@ -148,9 +148,9 @@ export const MainPage = () => {
                                 }));
                             }} />
                         <Grid direction={"row"}>
-                            <button onClick={async() => { await SaveData(currentBook); setLoading(true); }}>Save new</button>
-                            <button onClick={async() => { await UpdateData(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Save</button>
-                            <button onClick={async() => { await DeleteBook(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Delete</button>
+                            <button onClick={() => { SaveData(currentBook); setLoading(true); }}>Save new</button>
+                            <button onClick={() => { UpdateData(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Save</button>
+                            <button onClick={() => { DeleteBook(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Delete</button>
                         </Grid>
                     </Grid>
                     </div>
