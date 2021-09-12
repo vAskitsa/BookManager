@@ -36,7 +36,7 @@ export const MainPage = () => {
         }
         oBook.id = 0;
         axios
-            .post('https://localhost:44386/api/Books', oBook)
+            .post('http://localhost:5000/api/Books', oBook)
             .then((res) => {
                 setLoading(false);
             })
@@ -50,7 +50,7 @@ export const MainPage = () => {
             return;
         }
         axios
-            .put('https://localhost:44386/api/Books/' + oBook.id, oBook)
+            .put('http://localhost:5000/api/Books/' + oBook.id, oBook)
             .then((res) => {
                 setLoading(false);
             })
@@ -61,7 +61,7 @@ export const MainPage = () => {
     
     const DeleteBook = (oBook: IBook) => {
         axios
-            .delete('https://localhost:44386/api/Books/' + oBook.id)
+            .delete('http://localhost:5000/api/Books/' + oBook.id)
             .then((res) => {
                 setLoading(false);
             })
@@ -83,7 +83,7 @@ export const MainPage = () => {
     }
 
     useEffect(() => {
-        axios.get('https://localhost:44386/api/Books')
+        axios.get('http://localhost:5000/api/Books')
             .then((result: any) => {
                 setLstData(result.data);
                 setLoading(false);
