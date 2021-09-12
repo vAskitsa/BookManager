@@ -19,7 +19,9 @@
   },
   "scripts": {
     "setup": "npm install",
-    "start": "npm run setup && concurrently \"react-scripts start\" && \"cd ../Back/BookManagerApi-master && dotnet run BookManagerApi\"",
+    "client": "react-scripts start",
+    "server": "cd ../Back/BookManagerApi-master && dotnet run BookManagerApi",
+    "start": "npm run setup && concurrently \"npm run client\" \"npm run server\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
