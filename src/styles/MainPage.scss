@@ -1,12 +1,18 @@
-.form {
-    margin-top: 4%
+  .form {
+    margin-top: 4%;
   }
-  .tbBooks {
-    margin-top: 20%
+  .form label {
+    display: flex;
+  }
+  .form button {
+    margin-left: 7%;
+  }
+  .page {
+    margin-top: 2%;
   }
   .tRow :hover{
-    background-color: lightslategrey
+    background-color: cornsilk;
   }
   .selectedRow{
-    background-color: azure
+    background-color: azure;
   }

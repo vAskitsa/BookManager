@@ -94,16 +94,16 @@ export const MainPage = () => {
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
-    return <div>
+    return <div className={"page"} >
 
         <Grid container direction={"row"}>
-            <Grid className={"tbBooks"} container item xs={6} spacing={4}>
-                <TableContainer style={{ maxWidth: 650 }} component={Paper}>
+            <Grid className={"tbBooks"} container item xs={5} spacing={4}>
+                <TableContainer component={Paper}>
                     <Table aria-label="custom pagination table">
                         <TableBody>
                             {
                                 lstData.map((row) => (
-                                    <TableRow className={currentBook.id === row.id ? "selectedRow" : ""} key={row.id}
+                                    <TableRow className={currentBook.id === row.id ? "selectedRow" : "tRow"} key={row.id}
                                         onClick={() => {
                                             let book: IBook = lstData.find((element: IBook) => element.id == row.id)!;
                                             setCurrentBook(book!);
@@ -111,7 +111,7 @@ export const MainPage = () => {
                                         <TableCell component="th" scope="row">
                                             {row.name}
                                         </TableCell>
-                                        <TableCell style={{ width: 160 }} align="right">
+                                        <TableCell align="right">
                                             {row.author}
                                         </TableCell>
                                     </TableRow>
@@ -120,11 +120,11 @@ export const MainPage = () => {
                     </Table>
                 </TableContainer>
             </Grid>
-            <Grid container item xs={6} spacing={4}>
+            <Grid style={{marginLeft: 55, marginTop: 30, maxWidth: 400}} container item xs={5} spacing={4}>
                 <div className="form">
                     <Grid spacing={3} container direction="column">
                         <label>Title</label>
-                        <Input value={currentBook.name}
+                        <TextField variant="outlined" value={currentBook.name}
                             onChange={(e: any) => {
                                 setCurrentBook((prevState: any) => ({
                                     ...prevState,
@@ -132,7 +132,7 @@ export const MainPage = () => {
                                 }));
                             }} />
                         <label>Author</label>
-                        <Input value={currentBook.author}
+                        <TextField variant="outlined" value={currentBook.author}
                             onChange={(e: any) => {
                                 setCurrentBook((prevState: any) => ({
                                     ...prevState,
@@ -148,12 +148,12 @@ export const MainPage = () => {
                                 }));
                             }} />
                         <Grid direction={"row"}>
-                            <button onClick={() => { UpdateData(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Save</button>
-                            <button onClick={() => { SaveData(currentBook); setLoading(true); }}>Save new</button>
-                            <button onClick={() => { DeleteBook(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Delete</button>
+                            <button onClick={async() => { await SaveData(currentBook); setLoading(true); }}>Save new</button>
+                            <button onClick={async() => { await UpdateData(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Save</button>
+                            <button onClick={async() => { await DeleteBook(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Delete</button>
                         </Grid>
                     </Grid>
-                </div>
+                    </div>
             </Grid>
         </Grid>
     </div>
