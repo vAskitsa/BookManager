@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import List from '@material-ui/core/List';
-import { ListItem } from '@material-ui/core';
-import { ListItemText } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
 import axios from 'axios';
-
-
+import "../styles/MainPage.scss";
 import { Input } from '@material-ui/core';
-import { thisExpression } from '@babel/types';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 interface IBook {
     id: number;
     name: string;
@@ -16,6 +19,9 @@ interface IBook {
 }
 
 const SaveData = (oBook: IBook) => {
+    if (!ValidateData(oBook)) {
+        return;
+    }
     oBook.id = 0;
     axios
         .post('https://localhost:44386/api/Books', oBook)
@@ -28,6 +34,9 @@ const SaveData = (oBook: IBook) => {
 }
 
 const UpdateData = (oBook: IBook) => {
+    if (!ValidateData(oBook)) {
+        return;
+    }
     axios
         .put('https://localhost:44386/api/Books/' + oBook.id, oBook)
         .then((res) => {
@@ -49,24 +58,30 @@ const DeleteBook = (oBook: IBook) => {
         });
 }
 
-const Selectitem = (e: any) => {
-
+const ValidateData = (oBook: IBook) => {
+    if (oBook.name === "") {
+        window.alert("Enter name!");
+        return false;
+    }
+    if (oBook.author === "") {
+        window.alert("Enter author!");
+        return false;
+    }
+    return true;
 }
 
 export const MainPage = () => {
-    let oBook: IBook = {
+    const oBook: IBook = {
         id: 0,
         author: "",
         description: "",
         name: ""
     }
-    const lstdd: IBook[] = [];
+    const lst: IBook[] = [];
 
     const [isLoading, setLoading] = useState(true);
     const [currentBook, setCurrentBook] = useState<IBook>(oBook);
-    const [lstData, setLstData] = useState(lstdd);
-
-
+    const [lstData, setLstData] = useState(lst);
 
     useEffect(() => {
         axios.get('https://localhost:44386/api/Books')
@@ -76,66 +91,72 @@ export const MainPage = () => {
             });
     }, [isLoading]);
 
-    console.log(lstData);
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
     return <div>
-        <Grid container direction={"row"}>
-            <Grid container item xs={6} spacing={3}>
-                <List>
-                    {
-                        lstData.map((oItem: IBook) => {
-                            return (
-                                <ListItem onClick={() => {
-                                    let book: IBook = lstData.find((element: IBook) => element.id == oItem.id)!;
-                                    console.log(book);
-                                    setCurrentBook(book!);
-                                }} key={1} button>
-                                    <ListItemText inset primary={oItem.name} />
-                                </ListItem>
-                            );
-                        })
-                    }
 
-                </List>
+        <Grid container direction={"row"}>
+            <Grid className={"tbBooks"} container item xs={6} spacing={4}>
+                <TableContainer style={{ maxWidth: 650 }} component={Paper}>
+                    <Table aria-label="custom pagination table">
+                        <TableBody>
+                            {
+                                lstData.map((row) => (
+                                    <TableRow className={currentBook.id === row.id ? "selectedRow" : ""} key={row.id}
+                                        onClick={() => {
+                                            let book: IBook = lstData.find((element: IBook) => element.id == row.id)!;
+                                            setCurrentBook(book!);
+                                        }}>
+                                        <TableCell component="th" scope="row">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell style={{ width: 160 }} align="right">
+                                            {row.author}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Grid>
-            <Grid container item xs={6} spacing={3}>
-                <Grid spacing={3} container direction="column">
-                    <label>Title</label>
-                    <Input value={currentBook.name}
-                        onChange={(e: any) => {
-                            setCurrentBook((prevState: any) => ({
-                                ...prevState,
-                                name: e.target.value
-                            }));
-                        }} />
-                    <label>Author</label>
-                    <Input value={currentBook.author}
-                        onChange={(e: any) => {
-                            setCurrentBook((prevState: any) => ({
-                                ...prevState,
-                                author: e.target.value
-                            }));
-                        }} />
-                    <label>Description</label>
-                    <Input value={currentBook.description}
-                        onChange={(e: any) => {
-                            setCurrentBook((prevState: any) => ({
-                                ...prevState,
-                                description: e.target.value
-                            }));
-                        }} />
-                    <Grid direction={"row"}>
-                        <button onClick={() => { UpdateData(currentBook); setLoading(true); }}>Save</button>
-                        <button onClick={() => { SaveData(currentBook); setLoading(true); }}>Save new</button>
-                        <button onClick={() => { DeleteBook(currentBook); setLoading(true); }}>Delete</button>
+            <Grid container item xs={6} spacing={4}>
+                <div className="form">
+                    <Grid spacing={3} container direction="column">
+                        <label>Title</label>
+                        <Input value={currentBook.name}
+                            onChange={(e: any) => {
+                                setCurrentBook((prevState: any) => ({
+                                    ...prevState,
+                                    name: e.target.value
+                                }));
+                            }} />
+                        <label>Author</label>
+                        <Input value={currentBook.author}
+                            onChange={(e: any) => {
+                                setCurrentBook((prevState: any) => ({
+                                    ...prevState,
+                                    author: e.target.value
+                                }));
+                            }} />
+                        <label>Description</label>
+                        <TextField variant="outlined" value={currentBook.description}
+                            onChange={(e: any) => {
+                                setCurrentBook((prevState: any) => ({
+                                    ...prevState,
+                                    description: e.target.value
+                                }));
+                            }} />
+                        <Grid direction={"row"}>
+                            <button onClick={() => { UpdateData(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Save</button>
+                            <button onClick={() => { SaveData(currentBook); setLoading(true); }}>Save new</button>
+                            <button onClick={() => { DeleteBook(currentBook); setCurrentBook(oBook); setLoading(true); }} disabled={currentBook.id === 0}>Delete</button>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
             </Grid>
         </Grid>
     </div>
-
 }
 
 export default MainPage;
